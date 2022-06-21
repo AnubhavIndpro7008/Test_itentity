@@ -5,6 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Security;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace Test_Identity.Models
 {
@@ -19,9 +20,11 @@ namespace Test_Identity.Models
         public string Lastname { get; set; }
         [Required, Display(Name = "Phone No")]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Write valid Phone No.")]
+        //[Remote("IsPhoneExist", "candidatesModels", ErrorMessage = "Email is already available ")]
         public String Phone_no { get; set; }
         [Required, Display(Name = "Email")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Write valid Email")] 
+        //[Remote("IsEmailExist", "candidatesModels", ErrorMessage= "Email is already available ")]
         public string Email { get; set; }
         [Required, Display(Name = "Experience (In Year)")]
         public string Experience { get; set; }
@@ -35,7 +38,7 @@ namespace Test_Identity.Models
         public string Notice_period { get; set; }
         [Display(Name = "Created date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy HH:mm}")]
-        public DateTime Date_Time { get; set; }
+        public DateTime? Date_Time { get; set; }
         [Required, Display(Name = "Current Address")]
         public string Current_address { get; set; }
         [Required, Display(Name = "Permanent Address")]

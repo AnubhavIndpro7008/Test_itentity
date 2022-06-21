@@ -59,7 +59,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Skill, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBoxFor(Model => Model.SelectedArray, new MultiSelectList(Model.SkillList, "Skills", "Skills"), new { id = "multiSelectDropDown", multiple = "multiple" })
+                @Html.ListBoxFor(Model => Model.SelectedArray, new MultiSelectList(Model.SkillList, "ID", "Skills"), new { id = "multiSelectDropDown", multiple = "multiple" })
             </div>
         </div>
 

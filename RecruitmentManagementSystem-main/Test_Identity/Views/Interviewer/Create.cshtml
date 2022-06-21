@@ -24,6 +24,14 @@
     </div>
 
     <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
         @Html.LabelFor(model => model.Designation, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control" } })
@@ -47,28 +55,28 @@
             </div>
         </div>*@
 
-  
+
     <div class="from-horizontal">
         @Html.HiddenFor(model => model.ID)
 
         <div class="form-group">
             <lable>Select Skills</lable>
             @*Normal DropDown*@
-           @* @Html.DropDownListFor(model => model.SelectedSkillID, new SelectList(Model.SkillCollection, "ID", "Skills"), new { id = "normalDropDown" })*@
+            @* @Html.DropDownListFor(model => model.SelectedSkillID, new SelectList(Model.SkillCollection, "ID", "Skills"), new { id = "normalDropDown" })*@
 
             @*MuliSelect Dropdown*@
-            @Html.ListBoxFor(Model => Model.SelectedIDArray, new MultiSelectList(Model.SkillCollection, "ID", "Skills"), new { id ="multiSelectDropDown", multiple="multiple"})
+            @Html.ListBoxFor(Model => Model.SelectedIDArray, new MultiSelectList(Model.SkillCollection, "ID", "Skills"), new { id = "multiSelectDropDown", multiple = "multiple" })
         </div>
     </div>
 
     @*<div class="from-horizontal">
-        @Html.HiddenFor(model => model.ID)
+            @Html.HiddenFor(model => model.ID)
 
-        <div class="form-group">
-            <lable>Select Skills</lable>
-            Normal DropDown
-        </div>
-    </div>*@
+            <div class="form-group">
+                <lable>Select Skills</lable>
+                Normal DropDown
+            </div>
+        </div>*@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

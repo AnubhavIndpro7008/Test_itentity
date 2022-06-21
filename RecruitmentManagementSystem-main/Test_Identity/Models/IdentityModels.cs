@@ -56,5 +56,12 @@ namespace Test_Identity.Models
         public DbSet<SkillModels> skillModels { get; set; }
         public DbSet<InterviewerModel> interviewerModels  { get; set; }
         public DbSet<InterviewerSkillIDModels> interviewerSkill { get; set; }
+        public DbSet<InterviewModels> roundInterviews { get; set; }
+        public DbSet<ModeOfInterviewModels> modeOfInterviews { get; set;}
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<InterviewRound2> interviewRound2s { get; set; }
+
+        public System.Data.Entity.DbSet<Test_Identity.Models.InterviewVM> InterviewVMs { get; set; }
+        //public DbSet<EmailModels> Email { get; set; }
     }
 }

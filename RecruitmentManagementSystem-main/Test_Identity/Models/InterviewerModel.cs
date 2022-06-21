@@ -14,6 +14,8 @@ namespace Test_Identity.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        public string Email { get; set; }
+        [Required]
         public string Designation { get; set; }
         [Required, Display(Name = "Available timings")]
         public string Timing { get; set; }

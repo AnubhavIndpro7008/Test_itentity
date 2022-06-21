@@ -17,7 +17,24 @@ namespace Test_Identity.Controllers
         // GET: CandModels
         public ActionResult Index()
         {
-            return View(db.candidatesModels.ToList());
+            var candViewerDetails = db.candidatesModels.ToList();
+            //List<InterviewerSkillIDModels> viewModel = new List<InterviewerSkillIDModels>();
+
+            // 1 , int1 , 1,2,3  | 2, int2, 3,4 | 
+            // List <interViewerDetails.id == 1 | interViewerDetails.name = int1 | interViewerDetails.skillid = 1,2,3>  
+            foreach (var getSkillId in candViewerDetails)
+            {
+                IEnumerable<int> fetchedSkillIds = getSkillId.Skill.ToString().Split(',').Select(Int32.Parse);
+                var getSkillName = db.skillModels.Where(x => fetchedSkillIds.Contains(x.ID))
+                .Select(skillName => new{Name = skillName.Skills});
+
+                string fetchSkillName = string.Join(",", getSkillName.Select(x => x.Name));
+                //getSkillId.Skill = fetchSkillName;
+
+            }
+
+
+            return View(candViewerDetails);
         }
 
         // GET: CandModels/Details/5
@@ -35,11 +52,13 @@ namespace Test_Identity.Controllers
             return View(candModels);
         }
 
+
         // GET: CandModels/Create
 
         public ActionResult Create()
         {
             CandModels cand = new CandModels();
+            
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 cand.SkillList = db.skillModels.ToList();
@@ -53,34 +72,46 @@ namespace Test_Identity.Controllers
             candModels.Skill = string.Join(",", candModels.SelectedArray);
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
+                var email = db.candidatesModels.Where(x => x.Email == candModels.Email).FirstOrDefault();
+                var phone = db.candidatesModels.Where(x => x.Phone_no == candModels.Phone_no).FirstOrDefault();
+
+                if (email == null)
+                {
+                    if (phone == null)
+                    {
+                        db.candidatesModels.Add(candModels);
+                        db.SaveChanges();
+
+                    }
+                    else
+                    {
+                        ViewBag.Message = ("Phone No already exist.");
+                    }
+
+                }
+                else
+                {
+                    ViewBag.Message = ("Email already exist.");
+                }
                 db.candidatesModels.Add(candModels);
                 db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            
         }
 
+        //For Email
+        public JsonResult IsEmailExist(string Email)
+        {
+            return Json(!db.candidatesModels.Any(x => x.Email == Email),JsonRequestBehavior.AllowGet);
+        }
 
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        //For Phone
+        public JsonResult IsPhoneExist(string Phone)
+        {
+            return Json(!db.candidatesModels.Any(x => x.Phone_no == Phone),JsonRequestBehavior.AllowGet);
+        }
 
-        // POST: CandModels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "Id,Firstname,Lastname,Phone_no,Email,Experience,Skill,Current_CTC,Expected_CTC,Notice_period,Created_date,Current_address,Permanent_address")] CandModels candModels)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.candidatesModels.Add(candModels);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(candModels);
-        //}
 
         // GET: CandModels/Edit/5
         public ActionResult Edit(int id = 0)
@@ -91,6 +122,7 @@ namespace Test_Identity.Controllers
                 if (id != 0)
                 {
                     cand = db.candidatesModels.Where(x => x.Id == id).FirstOrDefault();
+                    cand.SelectedArray = cand.Skill.Split(',').ToArray();
                 }
                 cand.SkillList = db.skillModels.ToList();
             }

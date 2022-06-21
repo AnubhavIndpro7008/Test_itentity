@@ -1,0 +1,114 @@
+﻿@model Test_Identity.Models.InterviewModels
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>RoundInterviewModels</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Round, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Round, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Round, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CandidateId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.CandidateId, new SelectList(Model.Candidate, "Id", "Firstname"), new { id = "normalDropDown" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InterviewerId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.InterviewerId, new SelectList(Model.Interview, "ID", "Name"), new { id = "normalDropDown1" })
+
+            </div>
+        </div>
+
+        <div class="from-group">
+            @Html.LabelFor(model => model.JobId, htmlAttributes: new { @class = "control-lable col-md-2"})
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.JobId, new SelectList(Model.job, "Id", "JobDescription"), new { id = "normalDropDown2"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ModeOfInterview, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ModeOfInterview, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ModeOfInterview, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateTime, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="datetime-local" id="DateTime" name="DateTime" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comments, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Comments, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Comments, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $("#normalDropDown").chosen({
+                //disable_search_threshold: 5
+                width: "30%"
+
+            });
+        });
+        $(function () {
+            $("#normalDropDown1").chosen({
+                //disable_search_threshold: 5
+                width: "30%"
+
+            });
+        });
+        $(function () {
+            $("#normalDropDown2").chosen({
+                width: "30%"
+            });
+        });
+        //$(function () {
+        //    $(function () {
+        //        $("#normalDropDown").chosen({
+        //            width: "100%"
+        //        })
+        //    })
+        //})
+    </script>
+}

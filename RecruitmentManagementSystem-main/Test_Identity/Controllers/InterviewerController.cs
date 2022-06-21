@@ -19,13 +19,36 @@ namespace Test_Identity.Controllers
         //[Authorize(Roles = "Administrator, Recruiter")]
         // GET: TestInterviewerModels
         //public InterviewerController()
-        //{
+        //{ shi shir seva candra    dr amit mukharji
 
         //}
         public ActionResult Index()
         {
-            return View(db.interviewerModels.ToList());
+            var interViewerDetails = db.interviewerModels.ToList();
+            //List<InterviewerSkillIDModels> viewModel = new List<InterviewerSkillIDModels>();
+
+            // 1 , int1 , 1,2,3  | 2, int2, 3,4 | 
+            // List <interViewerDetails.id == 1 | interViewerDetails.name = int1 | interViewerDetails.skillid = 1,2,3>  
+            foreach (var getSkillId in interViewerDetails)
+            {
+                IEnumerable<int> fetchedSkillIds = getSkillId.SelectedSkillID.ToString().Split(',').Select(Int32.Parse);
+                var getSkillName = db.skillModels.Where(x => fetchedSkillIds.Contains(x.ID))
+                .Select(skillName => new
+                {
+                    Name = skillName.Skills,
+                });
+
+                string fetchSkillName = string.Join(",", getSkillName.Select(x => x.Name));
+                getSkillId.SelectedSkillID = fetchSkillName;
+
+            }
+
+
+            return View(interViewerDetails);
+            //    return View(db.interviewerModels.ToList());
         }
+
+
 
         //[Authorize(Roles = "Administrator, Recruiter")]
         // GET: TestInterviewerModels/Details/5
@@ -65,15 +88,24 @@ namespace Test_Identity.Controllers
             //interviewerModel.SelectedSkillName = string.Join(",", interviewerModel.SelectedNameArray);
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                db.interviewerModels.Add(interviewerModel);
-                db.SaveChanges();
+                var email = db.interviewerModels.Where(x => x.Email == interviewerModel.Email).FirstOrDefault();
+                if(email == null)
+                {
+                    db.interviewerModels.Add(interviewerModel);
+                    db.SaveChanges();
 
-                InterviewerSkillIDModels interviewerSkillobj = new InterviewerSkillIDModels();
-                interviewerSkillobj.InterviewerID = interviewerModel.ID;
-                interviewerSkillobj.SkillID = interviewerModel.SelectedSkillID;
-                db.interviewerSkill.Add(interviewerSkillobj);
+                    InterviewerSkillIDModels interviewerSkillobj = new InterviewerSkillIDModels();
+                    interviewerSkillobj.InterviewerID = interviewerModel.ID;
+                    interviewerSkillobj.SkillID = interviewerModel.SelectedSkillID;
+                    db.interviewerSkill.Add(interviewerSkillobj);
 
-                db.SaveChanges();
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ViewBag.Message = ("Email already exist.");
+                }
+                
             }
             return RedirectToAction("Index");
         }
@@ -85,13 +117,25 @@ namespace Test_Identity.Controllers
             InterviewerModel inter = new InterviewerModel();
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                if (id !=0)
+                if (id != 0)
                 {
                     inter = db.interviewerModels.Where(x => x.ID == id).FirstOrDefault();
+                    inter.SelectedIDArray = inter.SelectedSkillID.Split(',').ToArray();
                 }
                 inter.SkillCollection = db.skillModels.ToList();
             }
             return View(inter);
+            //InterviewerModel inter = new InterviewerModel();
+            //using (ApplicationDbContext db = new ApplicationDbContext())
+            //{
+            //    if (id !=0)
+            //    {
+            //        inter = db.interviewerModels.Where(x => x.ID == id).FirstOrDefault();
+            //        inter.SelectedIDArray = inter.SelectedSkillID.Split(',').ToArray();
+            //    }
+            //    inter.SkillCollection = db.skillModels.ToList();
+            //}
+            //return View(inter);
         }
         //Post
         [HttpPost]
@@ -112,6 +156,7 @@ namespace Test_Identity.Controllers
             }
             return RedirectToAction("Index");
         }
+
 
         //[Authorize(Roles = "Administrator, Recruiter")]
         // GET: TestInterviewerModels/Delete/5

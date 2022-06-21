@@ -13,9 +13,23 @@
 //        private ApplicationDbContext db = new ApplicationDbContext();
 //        // GET: InterviewerViewModel
 //        public ActionResult Index()
+//        {a
+
+//            return View();
+//        }
+//        [HttpPost]
+//        [ValidateAntiForgeryToken]
+//        public ActionResult Create(InterviewerViewModel jobskill)
 //        {
-            
-//            return View(InterviewerViewModel);
+//            if (ModelState.IsValid)
+//            {
+//                db.interviewerModels.Add(jobskill.JobData);
+//                db.interviewerModels.Add(jobskill.SkillData);
+//                db.SaveChanges();
+//                return RedirectToAction("Index");
+//            }
+
+//            return View(jobskill);
 //        }
 //    }
 //}
