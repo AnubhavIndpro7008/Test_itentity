@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,35 +18,82 @@ namespace Test_Identity.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: RoundInterviewModels
-        public ActionResult Index()
+        public ActionResult Index1(string SearchBy, string Search)
         {
-            InterviewModels model = new InterviewModels();
-            var round = db.roundInterviews.ToList();
-            foreach (var getCandId in round)
+            var CandModels = new List<CandModels>();
+            var Job = new List<Job>();
+            var Interviewer = new List<InterviewerModel>();
+            var interviewScheduler = new List<InterviewModels>();
+
+            var interviewObj = db.roundInterviews.Include(i => i.Candidate).Include(i => i.Interview).Include(i => i.Jobs).ToList();
+            var jobObject = db.Jobs.ToList();
+            foreach (var getSkillId in jobObject)
             {
-                string candObj = db.candidatesModels.Where(x => x.Id == getCandId.CandidateId).Select(y => y.Firstname + " " + y.Lastname).FirstOrDefault().ToString();
-                //getCandId.CandidateId = candObj;
+                IEnumerable<int> fetchedSkillIds = getSkillId.SelectedSkillID.ToString().Split(',').Select(Int32.Parse);
+                var getSkillName = db.skillModels.Where(x => fetchedSkillIds.Contains(x.ID))
+                .Select(skillName => new
+                {
+                    skillName.Skills
+                });
 
-                string interObj = db.interviewerModels.Where(x => x.ID == getCandId.InterviewerId).Select(y => y.Name).FirstOrDefault().ToString();
-                //getCandId.InterviewerName = interObj;
+                string fetchSkillName = string.Join(",", getSkillName.Select(x => x.Skills));
+                getSkillId.SelectedSkillID = fetchSkillName;
+            }
+            foreach (var intervewData in interviewObj)
+            {
 
-                string jobObj = db.Jobs.Where(x => x.Id == getCandId.JobId).Select(y => y.JobDescription).FirstOrDefault().ToString();
-                //getCandId.JobDiscription = jobObj;
+                CandModels.Add(new CandModels { Firstname = intervewData.Candidate.Firstname });
+                interviewScheduler.Add(new InterviewModels { Round = intervewData.Round, ModeOfInterview = intervewData.ModeOfInterview, DateTime = intervewData.DateTime, Comments = intervewData.Comments });
+                Interviewer.Add(new InterviewerModel { Name = intervewData.Interview.Name });
+                Job.Add(new Job { JobName = intervewData.Jobs.JobName, JobDescription = intervewData.Jobs.JobDescription, SelectedSkillID = intervewData.Jobs.SelectedSkillID });
 
             }
-            List<InterviewModels> interviewModels = new List<InterviewModels>();
-            List<InterviewVM> interviewVMObj = new List<InterviewVM>();
-            foreach(InterviewModels interviewObj in interviewModels)
+
+            InterviewTableViewModel IVM = new InterviewTableViewModel
             {
-                InterviewVM interviewVM = new InterviewVM();
-                interviewVM.Id = interviewObj.Id;
-                interviewVM.Round = interviewObj.Round;
-                interviewVM.ModeOfInterview = interviewObj.ModeOfInterview;
-                interviewVM.DateTime = interviewObj.DateTime;
-                interviewVM.Comments = interviewObj.Comments;
-            }
-            return View("VmView",interviewVMObj);
-          }
+
+                Cand = CandModels,
+                InterviewDetails = interviewScheduler,
+                Interviewer = Interviewer,
+                Jobs = Job
+            };
+
+            return View(IVM);
+            //var candViewerDetails = db.Jobs.ToList();
+            //foreach (var getSkillId in candViewerDetails)
+            //{
+            //    IEnumerable<int> fetchedSkillIds = getSkillId.SelectedSkillID.ToString().Split(',').Select(Int32.Parse);
+            //    var getSkillName = db.skillModels.Where(x => fetchedSkillIds.Contains(x.ID))
+            //    .Select(skillName => new { Name = skillName.Skills });
+
+            //    string fetchSkillName = string.Join(",", getSkillName.Select(x => x.Name));
+            //    getSkillId.SelectedSkillID = fetchSkillName;
+
+            //}
+            //var interviewRound2s = db.roundInterviews.Include(i => i.Candidate).Include(i => i.Interview).Include(i => i.Jobs).ToList();
+            //if (SearchBy == "Firstname")
+            //{            
+            //    var model = db.roundInterviews.Where(x => x.Candidate.Firstname == Search || Search == null).ToList();
+            //    return View(model);
+            //}
+            //else if (SearchBy == "Round")
+            //{
+            //    var model = db.roundInterviews.Where(x => x.Round.ToString() == Search || Search == null).ToList();
+            //    return View(model);
+            //}
+            //else if (SearchBy == "Results")
+            //{
+            //    var interviewRound2s = db.interviewRound2s.Include(i => i.Candidate).Include(i => i.Interview).Include(i => i.Jobs).ToList();
+            //    var model = db.interviewRound2s.Where(x => x.Results.ToString() == Search || Search == null).ToList();
+            //    return View(model);
+            //}
+            //else
+            //{
+            //    var model = db.roundInterviews.Where(x => x.Candidate.Skill == Search || Search == null).ToList();
+            //    return View(model);
+            //}
+        }
+    
 
 
         // GET: RoundInterviewModels/Details/5
@@ -67,14 +115,13 @@ namespace Test_Identity.Controllers
 
         public ActionResult Create()
         {
-            InterviewModels model = new InterviewModels();
-            using (ApplicationDbContext db = new ApplicationDbContext())
-            {
-                model.Candidate = db.candidatesModels.ToList();
-                model.Interview = db.interviewerModels.ToList();
-                model.job = db.Jobs.ToList();
-            }
-            return View(model);
+            var cand = db.candidatesModels.ToList();
+            ViewBag.cand = new SelectList(cand, "Id", "Firstname");
+            var interviewer = db.interviewerModels.ToList();
+            ViewBag.interviewer = new SelectList(interviewer, "ID", "Name");
+            var job = db.Jobs.ToList();
+            ViewBag.job = new SelectList(job, "Id", "JobDescription");
+            return View();
         }
 
         // POST
@@ -87,30 +134,32 @@ namespace Test_Identity.Controllers
                 var round = db.roundInterviews.ToList();
                 //foreach (var getCandId in round)
                 {
-                    string candObj = db.candidatesModels.Where(x => x.Id == roundInterviewModels.CandidateId).Select(y => y.Email).FirstOrDefault().ToString();
+
+                    //string candObj = db.candidatesModels.Where(x => x.Id == roundInterviewModels.CandidateId).Select(y => y.Email).FirstOrDefault().ToString();
 
                     //string interObj = db.interviewerModels.Where(x => x.ID == getCandId.InterviewerId).Select(y => y.Email).FirstOrDefault().ToString();
 
-                    if (candObj == null)
-                    {
-                        if (roundInterviewModels.DateTime <= DateTime.Now)
-                        {
-                            db.roundInterviews.Add(roundInterviewModels);
-                            //Email(roundInterviewModels);
-                            db.SaveChanges();
-                        }
-                        else
-                        {
-                            //ModelState.AddModelError("", "Enter valid Date Time.");
-                            Response.Write("<script>alert('Enter valid Date Time.')</script>");
-                            return Content(" ");
-                        }
-                    }
-                    else
-                    {
-                        Response.Write("<script>alert('Already Scheduled.')</script>");
-                        return Content(" ");
-                    }
+                    //if (candObj == null)
+                    //{
+                        //if (roundInterviewModels.DateTime <= DateTime.Now)
+                        //{
+                    db.roundInterviews.Add(roundInterviewModels);
+                    //Email(roundInterviewModels);
+                    db.SaveChanges();
+                        //}
+                        //else
+                        //{
+                        //    //ModelState.AddModelError("", "Enter valid Date Time.");
+                        //    Response.Write("<script>alert('Enter valid Date Time.')</script>");
+                        //    //TempData["message"] = "Update is disable , please wait till interview get over.";
+                        //    return Content(" ");
+                        //}
+                    //}
+                    //else
+                    //{
+                    //    Response.Write("<script>alert('Already Scheduled.')</script>");
+                    //    return Content(" ");
+                    //}
                 }
                 return RedirectToAction("Index");
             }
@@ -133,18 +182,19 @@ namespace Test_Identity.Controllers
         // GET: RoundInterviewModels/Edit/5
         public ActionResult Edit(int id = 0)
         {
-            InterviewModels model = new InterviewModels();
-            using (ApplicationDbContext db = new ApplicationDbContext())
+            if (id == null)
             {
-                if (id != 0)
-                {
-                    model = db.roundInterviews.Where(x => x.Id == id).FirstOrDefault();
-                }
-                model.Candidate = db.candidatesModels.ToList();
-                model.Interview = db.interviewerModels.ToList();
-                model.job = db.Jobs.ToList();
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(model);
+            InterviewModels interviewModels = db.roundInterviews.Find(id);
+            if (interviewModels == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CandidateId = new SelectList(db.candidatesModels, "Id", "Firstname", interviewModels.CandidateId);
+            ViewBag.InterviewerId = new SelectList(db.interviewerModels, "ID", "Name", interviewModels.InterviewerId);
+            ViewBag.JobId = new SelectList(db.Jobs, "Id", "JobName", interviewModels.JobId);
+            return View(interviewModels);
         }
 
         // POST: RoundInterviewModels/Edit/5

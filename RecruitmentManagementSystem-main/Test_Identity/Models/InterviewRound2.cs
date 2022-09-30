@@ -34,18 +34,8 @@ namespace Test_Identity.Models
 
         [ForeignKey("InterviewerId")]
         public InterviewerModel Interview { get; set; }
-        //public IEnumerable<InterviewerModel> Interview { get; set; }
-
         [ForeignKey("JobId")]
         public Job Jobs { get; set; }
-
-        //public string SelectedSkillID { get; set; }
-
-        //[NotMapped]
-        //public IEnumerable<Skills> SkillCollection { get; set; }
-
-        //[NotMapped]
-        //public string[] SelectedIDArray { get; set; }
 
         [Display(Name = "Result")]
         public StatusId Results { get; set; }

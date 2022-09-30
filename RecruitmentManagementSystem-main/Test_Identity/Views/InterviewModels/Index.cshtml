@@ -1,69 +1,285 @@
-﻿@model IEnumerable<Test_Identity.Models.InterviewModels>
+﻿@model Test_Identity.ViewModels.InterviewTableViewModel
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2 style="text-align:center">Index</h2>
+<head>
+    <style>
+        table, td, th {
+            border: 1px solid black;
+            width: 20px;
+            margin: 0px;
+        }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Round)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CandidateId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InterviewerId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.JobId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ModeOfInterview)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Comments)
-        </th>
-        <th></th>
-    </tr>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            padding: 0px;
+            margin: auto;
+        }
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Round)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.CandidateId)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.InterviewerId)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.JobId)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.ModeOfInterview)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.DateTime)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Comments)
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-    </td>
-</tr>
-}
+        th {
+            height: 70px;
+            margin: 0px;
+        }
 
-</table>
+        .header {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<div class="container">
+    <b>Search by:</b>
+    <select id="SearchBy">
+        @*<option value="Id">Id</option>*@
+        <option value="SelectedSkillID">Skill Name</option>
+        <option value="Results">Results</option>
+        <option value="InterviewerId">Interviewer</option>
+        <option value="Date_Time">Interview Date</option>
+    </select><br /><br />
+    @Html.TextBox("Search")<input type="submit" id="SearchBtn" value="Search" /><br /><br />
+
+    @*To show all details in table from database*@
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead class="header"><b>Round</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => cc.Round)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg">
+                <table class="table table-bordered">
+                    <thead class="header"><b>Candidate</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.Cand)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => cc.Firstname)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table cellspacing="10" class="table table-bordered">
+                    <thead class="header"><b>Interviewer_Name</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.Interviewer)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => cc.Name)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+
+                    <thead><b>Job_Role_Discription</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.Jobs)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => cc.JobDescription)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead><b>Interview_Mode</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => cc.ModeOfInterview)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead><b>Date$Time_of_Interview</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => cc.DateTime)
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead><b>Comment</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+
+                                <td>@Html.DisplayFor(modelItem => cc.Comments)</td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead><b>Edit</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = cc.Id })
+                                </td>
+
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead><b>Details</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.ActionLink("Details", "Details", new { id = cc.Id }) |
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <table class="table table-bordered">
+                    <thead><b>Delete</b></thead>
+                    <tbody>
+                        @foreach (var cc in Model.InterviewDetails)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.ActionLink("Delete", "Delete", new { id = cc.Id }) |
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    @*@model IEnumerable<Test_Identity.Models.InterviewModels>
+
+        @{
+            ViewBag.Title = "Index";
+        }
+
+        <h2>Index</h2>
+
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Round)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CandidateId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.InterviewerId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.JobId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ModeOfInterview)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comments)
+                </th>
+                <th></th>
+            </tr>
+
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Round)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CandidateId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InterviewerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModeOfInterview)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+        }
+
+        </table>*@

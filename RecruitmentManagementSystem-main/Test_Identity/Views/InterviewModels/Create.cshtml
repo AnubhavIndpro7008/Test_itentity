@@ -23,27 +23,23 @@
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.CandidateId, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.CandidateId, "CandidateId", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @*DropDown*@
-            @Html.DropDownListFor(model => model.CandidateId, new SelectList(Model.Candidate, "Id", "Firstname"), new { id = "normalDropDown" })
+            @Html.DropDownListFor(model => model.CandidateId, ViewBag.cand as SelectList, "Candidate Name", new { @class = "form-control", id = "normalDropDown" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.InterviewerId, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.InterviewerId, "InterviewerId", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @*DropDown*@
-            @Html.DropDownListFor(model => model.InterviewerId, new SelectList(Model.Interview, "ID", "Name"), new { id = "normalDropDown1" })
+            @Html.DropDownListFor(model => model.InterviewerId, ViewBag.interviewer as SelectList, "Interviewer Name", new { @class = "form-control", id = "normalDropDown1" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.JobId, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.JobId, "JobId", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @*DropDown*@
-            @Html.DropDownListFor(model => model.JobId, new SelectList(Model.job, "Id", "JobDescription"), new { id = "normalDropDown2" })
-
+            @Html.DropDownListFor(model => model.JobId, ViewBag.job as SelectList, "Job Description", new { @class = "form-control", id = "normalDropDown2" })
         </div>
     </div>
 
@@ -82,10 +78,10 @@
     <p style="color:red">
 
         @ViewBag.ErrorMessage
-      </p>
-  
+    </p>
 
-  </div>
+
+</div>
 }
 
 <div>

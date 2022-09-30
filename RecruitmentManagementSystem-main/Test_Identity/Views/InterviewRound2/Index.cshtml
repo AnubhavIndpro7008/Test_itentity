@@ -1,114 +1,55 @@
-﻿@model IEnumerable<Test_Identity.Models.InterviewRound2>
+﻿@model IPagedList<Test_Identity.Models.InterviewRound2>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index1";
 }
 
-<h2>Index</h2>
+@*@using PagedList.MVC;*@
+@using PagedList;
 
-<div class="container">
-    <b>Search by:</b>
-    <select id="SearchBy">
-        @*<option value="Id">Id</option>*@
-        <option value="CandidateId">Candidate</option>
-        <option value="Skill">Skill</option>
-        <option value="Round">Round</option>
-        <option value="Results">Results</option>
-    </select><br /><br />
-    @Html.TextBox("Search")<input type="submit" id="SearchBtn" value="Search" /><br /><br />
+<h2>Index1</h2>
 
-    @*To show all details in table from database*@
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Round</th>
-                <th>Candidate Name</th>
-                <th>Interviewer Name</th>
-                <th>Job Name</th>
-                <th>Job Description</th>
-                <th>Mode of Interview</th>
-                <th>Date of Interview</th>
-                <th>Skill Name</th>
-                <th>Result</th>
-                <th>Comment</th>
-
-            </tr>
-        </thead>
-        <tbody id="DataSearching">
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Round</td>
-                    <td>@item.Candidate.Firstname</td>
-                    <td>@item.Interview.Name</td>
-                    <td>@item.Jobs.JobName</td>
-                    <td>@item.Jobs.JobDescription</td>
-                    <td>@item.ModeOfInterview</td>
-                    <td>@item.Date_Time</td>
-                    <td>@item.Candidate.Skill</td>
-                    <td>@item.Results</td>
-                    <td>@item.Comments</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                    </td>
-                </tr>
-
-            }
-        </tbody>
-    </table>
-</div>
-<script src="~/Scripts/jquery-3.4.1.min.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $("#SearchBtn").click(function () {
-            var SearchBy = $("#SearchBy").val();
-            var SearchValue = $("#Search").val();
-            var SetData = $("#DataSearching");
-            SetData.html("");
-            $.ajax({
-                type: "post",
-                url: "/InterviewRound2Controller/GetSearchingData?SearchBy=" + SearchBy + "&SearchValue" + SearchValue,
-                contentType: "html",
-                success: function (result) {
-
-                }
-            })
-        })
-    })
-</script>
-
-
-@*<p>
+<p>
     @Html.ActionLink("Create New", "Create")
 </p>
+<p>
+    @using (Html.BeginForm("Index", "InterviewRound2", FormMethod.Get))
+    {
+        <b>Search </b>@Html.RadioButton("SearchBy", "Firstname", true)<b>Candidate name</b>
+        @Html.RadioButton("SearchBy", "SelectedSkillID", true)<b>Skill</b>
+        @Html.RadioButton("SearchBy", "Round", true)<b>Round</b>
+        @Html.RadioButton("SearchBy", "Result", true)<b>Result</b>
+        @Html.TextBox("Search")<input type="submit" value="Search" />
+    }
+</p>
+
+
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Candidate.Firstname)
+            @Html.DisplayNameFor(model => model.First().Candidate.Firstname)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Interview.Name)
+            @Html.DisplayNameFor(model => model.First().Interview.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Jobs.JobName)
+            @Html.DisplayNameFor(model => model.First().Jobs.JobName)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Round)
+            @Html.DisplayNameFor(model => model.First().Round)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ModeOfInterview)
+            @Html.DisplayNameFor(model => model.First().ModeOfInterview)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Date_Time)
+            @Html.DisplayNameFor(model => model.First().Date_Time)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Comments)
+            @Html.DisplayNameFor(model => model.First().Comments)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Results)
+            @Html.DisplayNameFor(model => model.First().Results)
         </th>
         <th></th>
     </tr>
@@ -144,9 +85,11 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                @Html.ActionLink("Update", "Update", new { id = item.Id })
+                @Html.ActionLink("History", "History", new { id = item.Id }) 
             </td>
         </tr>
     }
 
-</table>*@
+</table>
+
+@*@Html.PagedListPager(Model,i=>Url.Action("Index", "InterviewRound2",new {i, search=Request.QueryString["search"]}))*@

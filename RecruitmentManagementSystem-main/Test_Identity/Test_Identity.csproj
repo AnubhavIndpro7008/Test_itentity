@@ -49,10 +49,35 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Elasticsearch.Net, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.7.17.4\lib\net461\Elasticsearch.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Nest, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.7.17.4\lib\net461\Nest.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.5.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -274,14 +299,20 @@
     <Compile Include="Migrations\202206170739400_round2.designer.cs">
       <DependentUpon>202206170739400_round2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206240443509_interview_round.cs" />
+    <Compile Include="Migrations\202206240443509_interview_round.designer.cs">
+      <DependentUpon>202206240443509_interview_round.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CandModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Controllers\InterviewerController.cs" />
+    <Compile Include="Models\Interview.cs" />
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\InterviewerSkillIDModels.cs" />
     <Compile Include="Models\InterviewRound2.cs" />
+    <Compile Include="Models\InterviewViewModel.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModeOfInterviewModels.cs" />
@@ -292,7 +323,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\CandSkillsViewModel.cs" />
     <Compile Include="ViewModels\InterviewerViewModel.cs" />
-    <Compile Include="ViewModels\InterviewViewModel.cs" />
+    <Compile Include="ViewModels\HistoryViewModel.cs" />
+    <Compile Include="ViewModels\InterviewTableViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datetimepicker.css" />
@@ -429,12 +461,14 @@
     <Content Include="Views\Jobs\Create.cshtml" />
     <Content Include="Views\Jobs\Edit.cshtml" />
     <Content Include="Views\Jobs\Delete.cshtml" />
-    <Content Include="Views\InterviewModels\VmView.cshtml" />
     <Content Include="Views\InterviewRound2\Create.cshtml" />
     <Content Include="Views\InterviewRound2\Delete.cshtml" />
     <Content Include="Views\InterviewRound2\Details.cshtml" />
     <Content Include="Views\InterviewRound2\Edit.cshtml" />
     <Content Include="Views\InterviewRound2\Index.cshtml" />
+    <Content Include="Views\InterviewRound2\Index1.cshtml" />
+    <Content Include="Views\InterviewModels\Index1.cshtml" />
+    <Content Include="Views\InterviewRound2\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -510,6 +544,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202206170739400_round2.resx">
       <DependentUpon>202206170739400_round2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206240443509_interview_round.resx">
+      <DependentUpon>202206240443509_interview_round.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,136 @@
+﻿@model Test_Identity.ViewModels.HistoryViewModel
+
+@{
+    ViewBag.Title = "History";
+}
+
+<h2>History</h2>
+
+<div>
+    <h4>CandModels</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Firstname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Firstname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone_no)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone_no)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Experience)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Experience)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Skill)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Skill)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Current_CTC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Current_CTC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Expected_CTC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expected_CTC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date_Time)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date_Time)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Current_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Current_address)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                Round Of Interview
+            </th>
+            <th>
+                Mode Of Interview
+            </th>
+            <th>
+                Date Time of Interview
+            </th>
+            <th>
+                Comments
+            </th>
+            <th>
+                Results
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.interviewRound2s)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Round)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModeOfInterview)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date_Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Comments)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Results)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InterviewerId)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

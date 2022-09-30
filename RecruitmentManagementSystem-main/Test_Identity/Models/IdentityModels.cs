@@ -60,8 +60,9 @@ namespace Test_Identity.Models
         public DbSet<ModeOfInterviewModels> modeOfInterviews { get; set;}
         public DbSet<Job> Jobs { get; set; }
         public DbSet<InterviewRound2> interviewRound2s { get; set; }
+        //public DbSet<InterviewViewModel> VM { get; set; }
 
-        public System.Data.Entity.DbSet<Test_Identity.Models.InterviewVM> InterviewVMs { get; set; }
+        //public System.Data.Entity.DbSet<Test_Identity.Models.InterviewVM> InterviewVMs { get; set; }
         //public DbSet<EmailModels> Email { get; set; }
     }
 }
